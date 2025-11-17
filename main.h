@@ -53,15 +53,15 @@ void print_a_char(va_list *args)
  */
 void print_a_char_ptr(va_list *args)
 {
-	char *str = va_arg(args, char  *);
-	if (str == NULL)
+	va_arg(args, char  *);
+	if (s == NULL)
     {
-        str = "(null)";
+        s = "(null)";
     }
-    while (*str)
+    while (*s)
 	{
-        write(1, *str, 1);
-        *str++;
+        write(1, *s, 1);
+        *s++;
     }
 }
 
