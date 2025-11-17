@@ -34,11 +34,14 @@ int _printf(const char *format, ...)
 					write(1, "(null)", 6);
 					counter += 6;
 				}
+				else
+				{
 				while (*str)
 				{
 					write(1, str, 1);
 					str++;
 					counter++;
+				}
 				}
 			}
 			else if (*format == 'c')
