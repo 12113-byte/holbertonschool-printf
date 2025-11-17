@@ -1,19 +1,20 @@
 #include "main.h"
-#include <limit.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include <unistd.h>
 
 /**
  * _printf - prints all arguments
  *
- *
+ * Return: counter
  */
 
 int _printf(const char *format, ...)
 {
 	va_list args;
-	va_start(args, format);
 	int counter = 0;
+
+	va_start(args, format);
 
 	while (*format)
 	{
