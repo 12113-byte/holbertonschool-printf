@@ -31,7 +31,7 @@ int _printf(const char *format, ...)
 				char *str = va_arg(args, char*);
 				if (str == NULL)
 				{
-					return (0);
+					return ("(null)");
 				}
 				while (*str)
 				{
