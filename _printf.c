@@ -51,14 +51,13 @@ int _printf(const char *format, ...)
 				write(1, format, 1);
 				counter++;
 			}
-
-			format++;
 		}
 		else
 		{
 			write(1, format, 1);
 			counter++;
 		}
+	format++;
 	}
 	va_end(args);
 	return (counter);
