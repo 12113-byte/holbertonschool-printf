@@ -38,15 +38,28 @@ while (*format)
 		if (*format == 's')
 		{
 			char *s = va_arg(args, char *);
+			while (*format)
+			{
+				// our print function(*format)
+				format++;
+				counter++;
+			}
 		}
 		else if (*format == 'c')
 		{
 			char c = (char)va_arg(args, int);
+			// our print function(*format)
+			counter++;
 		}
 		else
 			print char literally
+			counter++;
 	}
+
+format++;
 }
 
+va_end(args);
+}
 
-
+return (counter);
