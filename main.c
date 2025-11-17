@@ -3,24 +3,7 @@
 #include <stdio.h>
 
 /**
- * _strlen - returns the length of a string.
- * @s: parameter to be checked for size.
- * Return: length of a string
- */
-
-int _strlen(char *s)
-{
-	int length = 0;
-
-	while (*s != '\0')
-	{
-		s++;
-		length++;
-	}
-	return (length);
-}
-
-/**
+ *
  *
  *
  */
@@ -37,11 +20,11 @@ while (*format)
 		format++;
 		if (*format == 's')
 		{
-			char *s = va_arg(args, char *);
-			while (*format)
+			char *str = va_arg(args, char*);
+			while (*str)
 			{
-				// our print function(*format)
-				format++;
+				// our print function(*str)
+				str++;
 				counter++;
 			}
 		}
@@ -52,7 +35,7 @@ while (*format)
 			counter++;
 		}
 		else
-			print char literally
+			//our print function(*format);
 			counter++;
 	}
 
