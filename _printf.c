@@ -31,7 +31,8 @@ int _printf(const char *format, ...)
 				char *str = va_arg(args, char*);
 				if (str == NULL)
 				{
-					return ("(null)");
+					write(1, "(null)", 6);
+					counter += 6;
 				}
 				while (*str)
 				{
@@ -60,6 +61,6 @@ int _printf(const char *format, ...)
 	format++;
 	}
 	va_end(args);
-	return (counter);
+	return (counter);i
 }
 
