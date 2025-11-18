@@ -19,7 +19,7 @@ specifier_t handlers[] = {
 int _printf(const char *format, ...)
 {
 	va_list args;
-	int counter, i, found;
+	int counter = 0, i, found;
 	char next;
 
 	va_start(args, format);
@@ -34,19 +34,20 @@ int _printf(const char *format, ...)
 			{
 				if (handlers[i].specifier == next)
 				{
-					handlers[i].print_func(&args);
+					counter += handlers[i].print_func(&args);
 					found = 1;
 					break;
 				}
 			}
-			if (found != 0)
-			{write (1, "%", 1);
-				counter++;
-				format++;
+			if (found)
+			{
+				format += 2;
 			}
 			else
 			{
-				format += 2;
+				write (1, format, 1);
+				counter++;
+				format++;
 			}
 		}
 		else
