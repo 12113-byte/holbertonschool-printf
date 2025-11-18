@@ -38,19 +38,19 @@ int _printf(const char *format, ...)
 					break;
 				}
 			}
+		}
 		if (found != 0)
 		{
 			write(1, "%", 1);
 			write(1, &next, 1);
 		}
 		format += 2;
-			else
-			{
-				write(1, format, 1);
-				counter++;
-			}
+		else
+		{
+			write(1, format, 1);
+			counter++;
 		}
-	format++;
+		format++;
 	}
 	va_end(args);
 	return (counter);
