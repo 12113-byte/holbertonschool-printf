@@ -19,7 +19,8 @@ specifier_t handlers[] = {
 int _printf(const char *format, ...)
 {
 	va_list args;
-	int counter;
+	int counter, i, found;
+	char next;
 
 	va_start(args, format);
 
@@ -27,30 +28,33 @@ int _printf(const char *format, ...)
 	{
 		if (*format == '%')
 		{
-			char next = (*format + 1);
-			int found = 0;
-			for (counter = 0; handlers[counter].specifier != 0; counter++)
+			next = *(format + 1);
+			found = 0;
+			for (i = 0; handlers[i].specifier != 0; i++)
 			{
-				if (handlers[counter].specifier == next)
+				if (handlers[i].specifier == next)
 				{
-					handlers[counter].print_func(&args);
+					handlers[i].print_func(&args);
 					found = 1;
 					break;
 				}
 			}
+			if (found != 0)
+			{write (1, "%", 1);
+				counter++;
+				format++;
+			}
+			else
+			{
+				format += 2;
+			}
 		}
-		if (found != 0)
-		{
-			write(1, "%", 1);
-			write(1, &next, 1);
-		}
-		format += 2;
 		else
 		{
 			write(1, format, 1);
 			counter++;
+			format++;
 		}
-		format++;
 	}
 	va_end(args);
 	return (counter);
