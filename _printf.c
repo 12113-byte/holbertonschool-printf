@@ -26,9 +26,13 @@ int _printf(const char *format, ...)
 
 	while (*format)
 	{
-		if (*format == '%' && *(format + 1) != '\0')
+		if (*format == '%')
 		{
 			next = *(format + 1);
+			if (next == '\0')
+			{
+				break;
+			}
 			found = 0;
 			for (i = 0; handlers[i].specifier != 0; i++)
 			{
@@ -45,6 +49,8 @@ int _printf(const char *format, ...)
 			}
 			else
 			{
+				write (1, format, 1);
+				counter++;
 				format++;
 			}
 		}
