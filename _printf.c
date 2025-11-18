@@ -3,18 +3,18 @@
 #include <stdarg.h>
 #include <unistd.h>
 
-/**
- * _printf - prints all arguments
- *
- * Return: counter
- */
-
 specifier_t handlers[] = {
 	{ 'c', print_a_char },
 	{ 's', print_a_str },
 	{ '%', print_special },
 	{ 0, NULL }
 };
+
+/**
+ * _printf - prints all arguments
+ * @format: string
+ * Return: counter
+ */
 
 int _printf(const char *format, ...)
 {
@@ -66,4 +66,3 @@ int _printf(const char *format, ...)
 	va_end(args);
 	return (counter);
 }
-
