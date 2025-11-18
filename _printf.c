@@ -10,10 +10,10 @@
  */
 
 specifier_t handlers[] = {
-    { 'c', print_a_char },
-    { 's', print_a_str },
-    { '%', print_special },
-    { 0, NULL }
+	{ 'c', print_a_char },
+	{ 's', print_a_str },
+	{ '%', print_special },
+	{ 0, NULL }
 };
 
 int _printf(const char *format, ...)
@@ -31,6 +31,7 @@ int _printf(const char *format, ...)
 			next = *(format + 1);
 			if (next == '\0')
 			{
+				return (0);
 				break;
 			}
 			found = 0;
