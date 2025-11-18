@@ -44,10 +44,11 @@ int _printf(const char *format, ...)
 			write(1, &next, 1);
 		}
 		format += 2;
-		else
-		{
-			write(1, format, 1);
-			counter++;
+			else
+			{
+				write(1, format, 1);
+				counter++;
+			}
 		}
 	format++;
 	}
