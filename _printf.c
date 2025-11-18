@@ -9,11 +9,6 @@
  * Return: counter
  */
 
-typedef struct specifier {
-    char specifier;
-    void (*print_func)(va_list *);
-} specifier_t;
-
 specifier_t handlers[] = {
     { 'c', print_a_char },
     { 's', print_a_str },
@@ -49,10 +44,11 @@ int _printf(const char *format, ...)
 			write(1, &next, 1);
 		}
 		format += 2;
-		else
-		{
-			write(1, format, 1);
-			counter++;
+			else
+			{
+				write(1, format, 1);
+				counter++;
+			}
 		}
 	format++;
 	}
