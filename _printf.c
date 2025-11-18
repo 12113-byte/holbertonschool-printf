@@ -16,15 +16,11 @@ int _printf(const char *format, ...)
 
 	va_start(args, format);
 
-	while (*format)
+	while (*format == specifier_t)
 	{
-		if (*format == '%')
+		if (handlers[counter].specifier == format[str])
 		{
-			format++;
-			if (*format == '%')
-			{
-				write(1, "%", 1);
-				counter++;
+			handlers[counter].print_func(&args)
 			}
 			else if (*format == 's')
 			{
