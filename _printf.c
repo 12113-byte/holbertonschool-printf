@@ -29,9 +29,10 @@ int _printf(const char *format, ...)
 		if (*format == '%')
 		{
 			next = *(format + 1);
+			
 			if (next == '\0')
 			{
-				return (0);
+				return (-1);
 				break;
 			}
 			found = 0;
