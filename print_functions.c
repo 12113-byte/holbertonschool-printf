@@ -12,24 +12,6 @@ void print_a_char(va_list *args)
 }
 
 /**
- * print_an_int - prints only  ints
- */
-//void print_an_int(va_list *args)
-//{
-//	int value = va_arg(*args, int);
-//	write(1, value, 1);
-//}
-
-/**
- * print_a_float - prints a  float
- */
-//void print_a_float(va_list *args)
-//{
-//	double value = va_arg(*args, double);
-//	write(1, value, 1);
-//}
-
-/**
  * print_a_char_ptr - prints a char pointer
  */
 void print_a_str(va_list *args)
@@ -54,3 +36,4 @@ void print_special(va_list *args)
     (void)args;
     write(1, "%", 1);
 }
+
