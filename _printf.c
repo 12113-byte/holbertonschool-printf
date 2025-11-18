@@ -9,11 +9,6 @@
  * Return: counter
  */
 
-typedef struct specifier {
-    char specifier;
-    void (*print_func)(va_list *);
-} specifier_t;
-
 specifier_t handlers[] = {
     { 'c', print_a_char },
     { 's', print_a_str },
