@@ -18,11 +18,11 @@ int print_a_char(va_list *args)
 int print_a_str(va_list *args)
 {
 	char *s = va_arg(*args, char*);
+    int len = 0;
 	if (s == NULL)
     {
         s = "(null)";
     }
-    int len = 0;
     while (*s)
 	{
         write(1, s, 1);
