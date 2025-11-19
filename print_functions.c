@@ -122,3 +122,87 @@ int print_binary(va_list *args)
 	}
 	return (len);
 }
+
+/**
+ * print_u - prints unsigned int
+ * @args: arguments
+ * Return: counter on success
+ */
+int print_u(va_list *args)
+{
+	unsigned int n = va_arg(*args, unsigned int);
+	unsigned int tmp = n;
+	int counter = 1;
+
+	while (tmp >= 10)
+	{
+        	tmp /= 10;
+        	counter++;
+	}
+
+	write(n, 10, 0);
+	return counter;
+}
+
+/**
+ * print_o - prints octal
+ * @args: arguments
+ * Return: counter on success
+ */
+int print_o(va_list *args)
+{
+	unsigned int n = va_arg(*args, unsigned int);
+	unsigned int tmp = n;
+	int counter = 1;
+
+	while (tmp >= 8)
+	{
+		tmp /= 8;
+        	counter++;
+    	}
+
+	write(n, 8, 0);
+	return counter;
+}
+
+/**
+ * print_x - prints lowercase hexadecimal
+ * @args: arguments
+ * Return: counter on success
+ */
+int print_x(va_list *args)
+{
+	unsigned int n = va_arg(*args, unsigned int);
+	unsigned int tmp = n;
+	int counter = 1;
+
+	while (tmp >= 16)
+	{
+        	tmp /= 16;
+        	counter++;
+    	}
+
+    	write(n, 16, 0);
+    	return counter;
+}
+
+/**
+ * print_X - prints uppercase hexadecimal
+ * @args: arguments
+ * Return: counter on success
+ */
+int print_X(va_list *args)
+{
+    	unsigned int n = va_arg(*args, unsigned int);
+    	unsigned int tmp = n;
+    	int counter = 1;
+
+    	while (tmp >= 16)
+	{
+        	tmp /= 16;
+        	counter++;
+    	}
+
+    	write(n, 16, 1);
+    	return counter;
+}
