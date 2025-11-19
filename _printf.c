@@ -7,6 +7,7 @@ specifier_t handlers[] = {
 	{ 'c', print_a_char },
 	{ 's', print_a_str },
 	{ '%', print_special },
+	{ 'd', print_a_decimal },
 	{ 0, NULL }
 };
 
@@ -29,7 +30,7 @@ int _printf(const char *format, ...)
 		if (*format == '%')
 		{
 			next = *(format + 1);
-			
+
 			if (next == '\0')
 			{
 				return (-1);

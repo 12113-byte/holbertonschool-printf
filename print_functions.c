@@ -50,3 +50,26 @@ int print_special(va_list *args)
 	return (1);
 }
 
+/**
+ * print_a_decimal - prints a decimal
+ * @args: arguments
+ * Return: 1 on success
+ */
+void print_a_decimal(va_list *args)
+{
+
+int n
+
+long num = n;
+
+if (num < 0)
+{
+write(1, '-', 1);
+num = -num;
+}
+
+if (num >= 10)
+write(num / 10);
+
+write char ((num % 10) + '0');
+}
