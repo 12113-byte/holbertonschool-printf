@@ -51,25 +51,42 @@ int print_special(va_list *args)
 }
 
 /**
- * print_a_decimal - prints a decimal
+ * print_an_int - prints an integer
  * @args: arguments
- * Return: 1 on success
+ * Return: int length
  */
-void print_a_decimal(va_list *args)
+
+int print_an_int_or_decimal(va_list *args)
 {
+	int number = va_arg(*args, int);
+	char digits[12];
+	int i = 0, j, len = 0;
+	long n = number;
 
-int n
+	if (number == 0)
+	{
+		write(1, "0", 1);
+		return (1);
+	}
 
-long num = n;
+	if (n < 0)
+	{
+		write(1, "-", 1);
+		len++;
+		n = -n;
+	}
 
-if (num < 0)
-{
-write(1, '-', 1);
-num = -num;
-}
+	while (n > 0)
+	{
+		digits[i] = (n % 10) + '0';
+		n = n / 10;
+		i++;
+	}
 
-if (num >= 10)
-write(num / 10);
-
-write char ((num % 10) + '0');
+	for (j = i - 1; j >= 0; j--)
+	{
+		write(1, &digits[j], 1);
+		len++;
+	}
+	return (len);
 }

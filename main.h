@@ -7,6 +7,7 @@ int _strlen(char *s);
 int print_a_str(va_list *args);
 int print_special(va_list *args);
 int print_a_char(va_list *args);
+int print_an_int_or_decimal(va_list *args);
 
 typedef struct specifier
 {

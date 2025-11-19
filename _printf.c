@@ -7,7 +7,8 @@ specifier_t handlers[] = {
 	{ 'c', print_a_char },
 	{ 's', print_a_str },
 	{ '%', print_special },
-	{ 'd', print_a_decimal },
+	{ 'i', print_an_int_or_decimal },
+	{ 'd', print_an_int_or_decimal },
 	{ 0, NULL }
 };
 
