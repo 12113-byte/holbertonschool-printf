@@ -128,7 +128,7 @@ int print_binary(va_list *args)
  * @args
  * Return: void
  */
-static void print_unsigned_base(va_list *args)
+void print_unsigned_base(va_list *args)
 {
 	unsigned int n = va_arg(*args, unsigned int);
 	unsigned int base;
@@ -136,9 +136,10 @@ static void print_unsigned_base(va_list *args)
     	const char *digits_l = "0123456789abcdef";
     	const char *digits_u = "0123456789ABCDEF";
     	const char *digits = uppercase ? digits_u : digits_l;
+	unsigned int result = digits[n % base];
 
     	if (n >= base)
         	print_unsigned_base(n / base, base, uppercase);
 
-    	write(1, (digits[n % base]), 1);
+    	write(1, result, 1);
 }
