@@ -162,7 +162,7 @@ int print_unsigned_base(va_list *args, unsigned int base, int uppercase)
 /**
  * print_unsigned_u - wrapper function for u
  * Return: print_unsigned_u
- */ 
+ */
 int print_unsigned_u(va_list args)
 {
     return print_unsigned_base(args, 10, 0);
