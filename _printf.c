@@ -10,10 +10,10 @@ specifier_t handlers[] = {
 	{ 'i', print_an_int_or_decimal },
 	{ 'd', print_an_int_or_decimal },
 	{ 'b', print_binary },
-	{ 'u', print_unsigned_base },
-	{ 'o', print_unsigned_base },
-	{ 'x', print_unsigned_base },
-	{ 'X', print_unsigned_base },
+	{ 'u', print_unsigned_u },
+	{ 'o', print_unsigned_o },
+	{ 'x', print_unsigned_x },
+	{ 'X', print_unsigned_X },
 	{ 0, NULL }
 };
 

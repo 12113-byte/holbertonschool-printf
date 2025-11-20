@@ -158,3 +158,40 @@ int print_unsigned_base(va_list *args, unsigned int base, int uppercase)
 
     	return 0;
 }
+
+/**
+ * print_unsigned_u - wrapper function for u
+ * Return: print_unsigned_u
+ */ 
+int print_unsigned_u(va_list args)
+{
+    return print_unsigned_base(args, 10, 0);
+}
+
+/**
+ * print_unsigned_o - wrapper function for o
+ * Return: print_unsigned_o
+ */
+int print_unsigned_o(va_list args)
+{
+    return print_unsigned_base(args, 8, 0);
+}
+
+/**
+ * print_unsigned_x - wrapper function for x
+ * Return: print_unsigned_x
+ */
+int print_unsigned_x(va_list args)
+{
+    return print_unsigned_base(args, 16, 0);
+}
+
+/**
+ * print_unsigned_X - wrapper function for X
+ * Return: print_unsigned_X
+ */
+int print_unsigned_X(va_list args)
+{
+    return print_unsigned_base(args, 16, 1);
+}
+
