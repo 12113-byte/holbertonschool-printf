@@ -125,21 +125,36 @@ int print_binary(va_list *args)
 
 /**
  * print_unsigned_base - prints an unsigned base
- * @args
+ * @n: counter
+ * @base: base value
+ * @uppercase: uppercase
  * Return: void
  */
-int print_unsigned_base(va_list *args)
+void print_unsigned_recursive(unsigned int n, unsigned int base, int uppercase)
 {
-	unsigned int n = va_arg(*args, unsigned int);
-	unsigned int base;
-	int uppercase;
     	const char *digits_l = "0123456789abcdef";
     	const char *digits_u = "0123456789ABCDEF";
     	const char *digits = uppercase ? digits_u : digits_l;
-	unsigned int result = digits[n % base];
 
     	if (n >= base)
-        	print_unsigned_base(n / base, base, uppercase);
+        	print_unsigned_recursive(n / base, base, uppercase);
 
-    	write(1, result, 1);
+    	char c = digits[n % base];
+    	write(1, &c, 1);
+}
+
+/**
+ * print_unsigned_base - prints an unsigned base
+ * @args: arguments
+ * @base: base values
+ * @uppercase: uppercases
+ * Return: 0
+ */
+int print_unsigned_base(va_list *args, unsigned int base, int uppercase)
+{
+    	unsigned int n = va_arg(*args, unsigned int);
+
+    	print_unsigned_recursive(n, base, uppercase);
+
+    	return 0;
 }
