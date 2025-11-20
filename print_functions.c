@@ -128,7 +128,7 @@ int print_binary(va_list *args)
  * @args
  * Return: void
  */
-void print_unsigned_base(va_list *args)
+int print_unsigned_base(va_list *args)
 {
 	unsigned int n = va_arg(*args, unsigned int);
 	unsigned int base;
