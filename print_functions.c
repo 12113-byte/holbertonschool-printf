@@ -124,85 +124,21 @@ int print_binary(va_list *args)
 }
 
 /**
- * print_u - prints unsigned int
- * @args: arguments
- * Return: counter on success
+ * print_unsigned_base - prints an unsigned base
+ * @args
+ * Return: void
  */
-int print_u(va_list *args)
+static void print_unsigned_base(va_list *args)
 {
 	unsigned int n = va_arg(*args, unsigned int);
-	unsigned int tmp = n;
-	int counter = 1;
+	unsigned int base;
+	int uppercase;
+    	const char *digits_l = "0123456789abcdef";
+    	const char *digits_u = "0123456789ABCDEF";
+    	const char *digits = uppercase ? digits_u : digits_l;
 
-	while (tmp >= 10)
-	{
-        	tmp /= 10;
-        	counter++;
-	}
+    	if (n >= base)
+        	print_unsigned_base(n / base, base, uppercase);
 
-	write(n, 10, 0);
-	return counter;
-}
-
-/**
- * print_o - prints octal
- * @args: arguments
- * Return: counter on success
- */
-int print_o(va_list *args)
-{
-	unsigned int n = va_arg(*args, unsigned int);
-	unsigned int tmp = n;
-	int counter = 1;
-
-	while (tmp >= 8)
-	{
-		tmp /= 8;
-        	counter++;
-    	}
-
-	write(n, 8, 0);
-	return counter;
-}
-
-/**
- * print_x - prints lowercase hexadecimal
- * @args: arguments
- * Return: counter on success
- */
-int print_x(va_list *args)
-{
-	unsigned int n = va_arg(*args, unsigned int);
-	unsigned int tmp = n;
-	int counter = 1;
-
-	while (tmp >= 16)
-	{
-        	tmp /= 16;
-        	counter++;
-    	}
-
-    	write(n, 16, 0);
-    	return counter;
-}
-
-/**
- * print_X - prints uppercase hexadecimal
- * @args: arguments
- * Return: counter on success
- */
-int print_X(va_list *args)
-{
-    	unsigned int n = va_arg(*args, unsigned int);
-    	unsigned int tmp = n;
-    	int counter = 1;
-
-    	while (tmp >= 16)
-	{
-        	tmp /= 16;
-        	counter++;
-    	}
-
-    	write(n, 16, 1);
-    	return counter;
+    	write(1, (digits[n % base]), 1);
 }
