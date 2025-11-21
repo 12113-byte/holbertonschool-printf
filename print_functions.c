@@ -16,7 +16,7 @@ void flush_buffer(char *buffer, int *buffer_counter)
  * @args: arguments
  * Return: 1 on success
  */
-int print_a_char(va_list *args)
+int print_a_char(va_list *args, char *buffer, int *buffer_counter)
 {
 	char c = va_arg(*args, int);
 	buffer[*buffer_counter] = c;
@@ -33,7 +33,7 @@ int print_a_char(va_list *args)
  * @args: arguments
  * Return: string length
  */
-int print_a_str(va_list *args)
+int print_a_str(va_list *args, char *buffer, int *buffer_counter)
 {
 	char *s = va_arg(*args, char*);
 	int len = 0, i = 0;
@@ -70,7 +70,7 @@ int print_a_str(va_list *args)
 * @args: arguments
 * Return: 1 on success
 */
-int print_special(va_list *args)
+int print_special(va_list *args, char *buffer, int *buffer_counter)
 {
 	(void)args;
 	buffer[*buffer_counter] = '%';
@@ -88,7 +88,7 @@ int print_special(va_list *args)
  * Return: int length
  */
 
-int print_an_int_or_decimal(va_list *args)
+int print_an_int_or_decimal(va_list *args, char *buffer, int *buffer_counter)
 {
 	int number = va_arg(*args, int);
 	char digits[sizeof(int) * 8 + 2];
@@ -144,7 +144,7 @@ int print_an_int_or_decimal(va_list *args)
  * Return: int length
  */
 
-int print_binary(va_list *args)
+int print_binary(va_list *args, char *buffer, int *buffer_counter)
 {
 	unsigned int n = va_arg(*args, unsigned int);
 	char digits[sizeof(unsigned int) *8];
@@ -188,7 +188,7 @@ int print_binary(va_list *args)
  * @uppercase: uppercase
  * Return: void
  */
-void print_unsigned_recursive(unsigned int n, unsigned int base, int uppercase, int *len, char *buffer, int *buffer_counter )
+void print_unsigned_recursive(unsigned int n, unsigned int base, int uppercase, int *len, char *buffer, int *buffer_counter)
 {
     	const char *digits_l = "0123456789abcdef";
     	const char *digits_u = "0123456789ABCDEF";
