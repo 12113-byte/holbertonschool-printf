@@ -15,6 +15,7 @@ specifier_t handlers[] = {
 	{ 'x', print_unsigned_x },
 	{ 'X', print_unsigned_X },
 	{ 'S', print_string },
+	{ 'p', print_address },
 	{ 0, NULL }
 };
 

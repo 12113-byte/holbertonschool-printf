@@ -188,7 +188,7 @@ int print_binary(va_list *args, char *buffer, int *buffer_counter)
  * @uppercase: uppercase
  * Return: void
  */
-void print_unsigned_recursive(unsigned int n, unsigned int base, int uppercase, int *len, char *buffer, int *buffer_counter)
+void print_unsigned_recursive(unsigned long n, unsigned int base, int uppercase, int *len, char *buffer, int *buffer_counter)
 {
 	const char *digits_l = "0123456789abcdef";
 	const char *digits_u = "0123456789ABCDEF";
@@ -341,3 +341,40 @@ int print_string(va_list *args, char *buffer, int *buffer_counter)
 	flush_buffer(buffer, buffer_counter);
 	return (len);
 }
+
+/**
+ * print_address - prints the numeric address
+ */
+
+int print_address(va_list *args, char *buffer, int *buffer_counter)
+{
+	int i = 0, len = 0;
+	unsigned long address;
+	void *ptr = va_arg(*args, void*);
+
+	if (ptr == NULL)
+	{
+		while (i < 5)
+		{
+			buffer[*buffer_counter] = "(nil)"[i];
+			(*buffer_counter)++;
+			i++;
+			len++;
+			if (*buffer_counter == 1024)
+			{
+				flush_buffer(buffer, buffer_counter);
+			}
+		}
+		return(len);
+	}
+	buffer[*buffer_counter] = '0';
+	(*buffer_counter)++;
+	len++;
+	buffer[*buffer_counter] = 'x';
+	(*buffer_counter)++;
+	len++;
+	address = (unsigned long)ptr;
+	print_unsigned_recursive(address, 16, 0, &len, buffer, buffer_counter);
+	return(len);
+}
+
