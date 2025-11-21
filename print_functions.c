@@ -7,8 +7,8 @@
  */
 void flush_buffer(char *buffer, int *buffer_counter)
 {
-        write(1, buffer, *buffer_counter);
-        *buffer_counter = 0;
+	write(1, buffer, *buffer_counter);
+	*buffer_counter = 0;
 }
 
 /**
@@ -66,10 +66,10 @@ int print_a_str(va_list *args, char *buffer, int *buffer_counter)
 }
 
 /**
-* print_special - prints a literal %
-* @args: arguments
-* Return: 1 on success
-*/
+ * print_special - prints a literal %
+ * @args: arguments
+ * Return: 1 on success
+ */
 int print_special(va_list *args, char *buffer, int *buffer_counter)
 {
 	(void)args;
@@ -153,13 +153,13 @@ int print_binary(va_list *args, char *buffer, int *buffer_counter)
 	if (n == 0)
 	{
 		buffer[*buffer_counter] = '0';
-                (*buffer_counter)++;
-                if (*buffer_counter == 1024)
-                {
-                        flush_buffer(buffer, buffer_counter);
-                }
-                len++;
-                return (len);
+		(*buffer_counter)++;
+		if (*buffer_counter == 1024)
+		{
+			flush_buffer(buffer, buffer_counter);
+		}
+		len++;
+		return (len);
 	}
 
 	while (n > 0)
@@ -171,12 +171,12 @@ int print_binary(va_list *args, char *buffer, int *buffer_counter)
 	for (j = i - 1; j >= 0; j--)
 	{
 		buffer[*buffer_counter] = digits[j];
-                (*buffer_counter)++;
-                len++;
-                if (*buffer_counter == 1024)
-                {
-                        flush_buffer(buffer, buffer_counter);
-                }
+		(*buffer_counter)++;
+		len++;
+		if (*buffer_counter == 1024)
+		{
+			flush_buffer(buffer, buffer_counter);
+		}
 	}
 	return (len);
 }
@@ -190,16 +190,16 @@ int print_binary(va_list *args, char *buffer, int *buffer_counter)
  */
 void print_unsigned_recursive(unsigned int n, unsigned int base, int uppercase, int *len, char *buffer, int *buffer_counter)
 {
-    	const char *digits_l = "0123456789abcdef";
-    	const char *digits_u = "0123456789ABCDEF";
-    	const char *digits = uppercase ? digits_u : digits_l;
+	const char *digits_l = "0123456789abcdef";
+	const char *digits_u = "0123456789ABCDEF";
+	const char *digits = uppercase ? digits_u : digits_l;
 	char c;
-	
-    	if (n >= base)
+
+	if (n >= base)
 	{
-		print_unsigned_recursive(n / base, base, uppercase, len);
+		print_unsigned_recursive(n / base, base, uppercase, len, buffer, buffer_counter);
 	}
-    	c = digits[n % base];
+	c = digits[n % base];
 	buffer[*buffer_counter] = c;
 	(*buffer_counter)++;
 	(*len)++;
@@ -216,14 +216,13 @@ void print_unsigned_recursive(unsigned int n, unsigned int base, int uppercase, 
  * @uppercase: uppercases
  * Return: 0
  */
-int print_unsigned_base(va_list *args, unsigned int base, int uppercase)
+int print_unsigned_base(va_list *args, unsigned int base, int uppercase, char *buffer, int *buffer_counter)
 {
-    	unsigned int n = va_arg(*args, unsigned int);
+	unsigned int n = va_arg(*args, unsigned int);
 	int len = 0;
 
-    	print_unsigned_recursive(n, base, uppercase, &len);
-
-    	return (len);
+	print_unsigned_recursive(n, base, uppercase, &len, buffer, buffer_counter);
+	return (len);
 }
 
 /**
@@ -232,7 +231,7 @@ int print_unsigned_base(va_list *args, unsigned int base, int uppercase)
  */
 int print_unsigned_u(va_list *args, char *buffer, int *buffer_counter)
 {
-    return print_unsigned_base(args, 10, 0, buffer, buffer_counter);
+	return print_unsigned_base(args, 10, 0, buffer, buffer_counter);
 }
 
 /**
@@ -241,7 +240,7 @@ int print_unsigned_u(va_list *args, char *buffer, int *buffer_counter)
  */
 int print_unsigned_o(va_list *args, char *buffer, int *buffer_counter)
 {
-    return print_unsigned_base(args, 8, 0, buffer, buffer_counter);
+	return print_unsigned_base(args, 8, 0, buffer, buffer_counter);
 }
 
 /**
@@ -250,7 +249,7 @@ int print_unsigned_o(va_list *args, char *buffer, int *buffer_counter)
  */
 int print_unsigned_x(va_list *args, char *buffer, int *buffer_counter)
 {
-    return print_unsigned_base(args, 16, 0, buffer, buffer_counter);
+	return print_unsigned_base(args, 16, 0, buffer, buffer_counter);
 }
 
 /**
@@ -259,7 +258,7 @@ int print_unsigned_x(va_list *args, char *buffer, int *buffer_counter)
  */
 int print_unsigned_X(va_list *args, char *buffer, int *buffer_counter)
 {
-    return print_unsigned_base(args, 16, 1, buffer, buffer_counter);
+	return print_unsigned_base(args, 16, 1, buffer, buffer_counter);
 }
 
 /**
@@ -270,8 +269,9 @@ int print_unsigned_X(va_list *args, char *buffer, int *buffer_counter)
 
 int print_string(va_list *args, char *buffer, int *buffer_counter)
 {
-	int len = 0, i = 0, firt_digit, second_digit;
+	int len = 0, i = 0, first_digit, second_digit;
 	unsigned char val;
+	char first_char, second_char;
 	char *s = va_arg(*args, char*);
 
 	if (s == NULL)
@@ -292,46 +292,52 @@ int print_string(va_list *args, char *buffer, int *buffer_counter)
 	{
 		if (*s >= 32 && *s <= 126)
 		{
-		buffer[*buffer_counter] = *s;
-		(*buffer_counter)++;
-		s++;
-		len++;
-		if (*buffer_counter == 1024)
-		{
-			flush_buffer(buffer, buffer_counter);
-		}
+			buffer[*buffer_counter] = *s;
+			(*buffer_counter)++;
+			s++;
+			len++;
+			if (*buffer_counter == 1024)
+			{
+				flush_buffer(buffer, buffer_counter);
+			}
 		}
 		else
 		{
-		buffer[*buffer_counter] = '\\';
-		(*buffer_counter)++;
-		buffer[*buffer_counter] = 'x';
-		(*buffer_counter)++;
-		val = (unsigned char)*s;
-		first_digit = val / 16;
-		buffer[*buffer_counter] = first_digit;
-		(*buffer_counter)++;
-		second_digit = val % 16;
-		buffer[*buffer_counter] = second_digit;
-		(*buffer_counter)++;
-		len++;
-		if (first_digit < 10)
-		{
-			first_char = '0' + first_digit;
-			buffer[*buffer_counter] = *s;
+			buffer[*buffer_counter] = '\\';
 			(*buffer_counter)++;
-		}
-		else (first_digit >= 10)
-		{
-			first_char = 'A' + (first_digit - 10);
-			buffer[*buffer_counter] = *s;
+			buffer[*buffer_counter] = 'x';
 			(*buffer_counter)++;
-		}
-		if (*buffer_counter == 1024)
-		{
-			flush_buffer(buffer, buffer_counter);
-		}
+			val = (unsigned char)*s;
+			first_digit = val / 16;
+			second_digit = val % 16;
+			if (first_digit < 10)
+			{
+				first_char = '0' + first_digit;
+			}
+			else
+			{
+				first_char = 'A' + (first_digit - 10);
+			}
+			buffer[*buffer_counter] = first_char;
+			(*buffer_counter)++;
+			if (second_digit < 10)
+			{
+				second_char = '0' + second_digit;
+			}
+			else
+			{
+				second_char = 'A' + (second_digit - 10);
+			}
+			buffer[*buffer_counter] = second_char;
+			(*buffer_counter)++;
+			s++;
+			len += 4;
+			if (*buffer_counter == 1024)
+			{
+				flush_buffer(buffer, buffer_counter);
+			}
 		}
 	}
+	flush_buffer(buffer, buffer_counter);
 	return (len);
 }

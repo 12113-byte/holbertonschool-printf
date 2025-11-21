@@ -2,6 +2,7 @@
 #define MAIN_H
 #include <stdarg.h>
 
+void flush_buffer(char *buffer, int *buffer_counter);
 int _printf(const char *format, ...);
 int _strlen(char *s);
 int print_a_str(va_list *args, char *buffer, int *buffer_counter);
