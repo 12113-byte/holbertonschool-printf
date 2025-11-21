@@ -138,10 +138,11 @@ void print_unsigned_recursive(unsigned int n, unsigned int base, int uppercase)
 	char c;
 
     	if (n >= base)
-        	print_unsigned_recursive(n / base, base, uppercase);
+        	print_unsigned_recursive(n / base, base, uppercase, len);
 
     	c = digits[n % base];
     	write(1, &c, 1);
+	(*len)++;
 }
 
 /**
