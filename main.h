@@ -20,7 +20,7 @@ int print_string(va_list *args);
 typedef struct specifier
 {
 	char specifier;
-	int (*print_func)(va_list *);
+	int (*print_func)(va_list *, char *, int *);
 } specifier_t;
 
 #endif

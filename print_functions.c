@@ -3,6 +3,15 @@
 #include <unistd.h>
 
 /**
+ * flush_buffer - prints all stored values
+ */
+void flush_buffer(char *buffer, int *buffer_counter)
+{
+        write(1, buffer, *buffer_counter);
+        *buffer_counter = 0;
+}
+
+/**
  * print_a_char - prints  only  a char
  * @args: arguments
  * Return: 1 on success
@@ -170,15 +179,6 @@ int print_binary(va_list *args)
                 }
 	}
 	return (len);
-}
-
-/**
- * flush_buffer - prints all stored values
- */
-void flush_buffer(char *buffer, int *buffer_counter)
-{
-	write(1, buffer, *buffer_counter);
-	*buffer_counter = 0;
 }
 
 /**
