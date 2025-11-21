@@ -28,7 +28,7 @@ int _printf(const char *format, ...)
 {
 	va_list args;
 	char buffer [1024];
-	int counter = 0, buffer = 0, i, found;
+	int counter = 0, buffer_counter = 0, i, found;
 	char next;
 
 	va_start(args, format);
