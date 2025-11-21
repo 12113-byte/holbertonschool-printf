@@ -130,7 +130,7 @@ int print_binary(va_list *args)
  * @uppercase: uppercase
  * Return: void
  */
-void print_unsigned_recursive(unsigned int n, unsigned int base, int uppercase)
+void print_unsigned_recursive(unsigned int n, unsigned int base, int uppercase, int *len)
 {
     	const char *digits_l = "0123456789abcdef";
     	const char *digits_u = "0123456789ABCDEF";
@@ -155,10 +155,11 @@ void print_unsigned_recursive(unsigned int n, unsigned int base, int uppercase)
 int print_unsigned_base(va_list *args, unsigned int base, int uppercase)
 {
     	unsigned int n = va_arg(*args, unsigned int);
+	int len = 0;
 
-    	print_unsigned_recursive(n, base, uppercase);
+    	print_unsigned_recursive(n, base, uppercase, &len);
 
-    	return (0);
+    	return (len);
 }
 
 /**
