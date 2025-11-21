@@ -1,0 +1,143 @@
+The Main Function
+
+Here is our custom printf function!
+
+Prototype: int _printf(const char *format, ...);
+This prototype has two arguments: *format and ...
+format: is for the character %
+...: is because we don't know how many arguments we will have so it tells the code to look for many
+
+The end goal of the _printf function is to produce output according to a format string and various amounts of arguments, similar to a standard printf function. The output is written to stdout (standard output).
+
+The format argument is a null-terminated string containing character and conversion specifiers. Characters (chars) are copied directly to the output. Conversion specifiers (arguments beginning with a "%") use a single character to determine the type of argument to print.
+
+In our function, we use an internal dispatch table:
+
+           specifier_t handlers[] = {
+                { 'c', print_a_char },
+                { 's', print_a_str },
+                { '%', print_special },
+                { 'i', print_an_int_or_decimal },
+                { 'd', print_an_int_or_decimal },
+                { 'b', print_binary },
+                { 'u', print_unsigned_u },
+                { 'o', print_unsigned_o },
+                { 'x', print_unsigned_x },
+                { 'X', print_unsigned_X },
+                { 'S', print_string },
+                { 0, NULL }
+           };
+
+Each handler corresponds to a custom print function using the following prototype:
+
+	int print_func(va_list *args, char *argument, int *argument);
+
+This tells the code that when a valid conversion specifier is found, the corresponding function will initiate. It writes characters into a shared buffer and returns the number of characters produced. The value is added to the output counter.
+
+Additionally, the function also accumulates characters in a fixed-sized buffer array of 1024 bytes:
+	
+	char buffer[1024];
+
+When the buffer becomes full, or when the function finishes processing the format, flush_buffer is called to write the buffered data to stdout and reset the buffer counter. The buffer is always flushed before returning.
+
+If a '%' is followed by an unknown specifier, we've made it so that it prints the '%' literally and continues normally.
+
+Upon success, our function will always return the total number of characters written. If this is not the case and the format ends with a trailing '%', the function returns -1 to indicate an error. It will also lead to an error is a null pointer is passed as format string.
+
+As per request from the criteria, we have not implemented flag chars such as +, -, 0, #, space or field widths, precision and length modifiers.
+
+
+
+0. I'm not going anywhere. You can print that wherever you want to. I'm here and I'm a Spur for life
+
+First task requires us to write a function that produces output according to a format that returns the number of characters printed to stdout. For this task we are only working with chars and string specifiers (%c and %s). 
+
+We created two functions using the following prototypes:
+	int print_a_char(va_list *args, char *buffer, int *buffer_counter);
+	int print_a_str(va_list *args, char *buffer, int *buffer_counter);
+
+These functions are used when processing %c and %s conversion specifiers. Each function writes formatted output into the buffer and updates the buffer position counter. When the buffer reaches it's maximum capacity, it is flushed using our flush_buffer function mentioned in the main function page.
+
+The first function: int print_a_char(va_list *args, char *buffer, int *buffer_counter). 
+Fetches a single character from the argument list and writes it into the output buffer. The argument is retrieved and promoted to an int when passed through the va_list. It is then cast to char when stored in the buffer. After writing the char, the buffer counter is incremented and flushes if at capacity. The return value must always be the number of characters written.
+
+The second function: int print_a_str(va_list *args, char *buffer, int *buffer_counter).
+Fetches a char pointer from the va_list and writes the referenced string to the output buffer. If the retrieved pointer is NULL, the literal string "(null)" is printed instead. The function writes characters incrementally until a NULL byte ('\0') is found. After each character is stored, the buffer counter increments and whenever the counter reaches the buffer capacity, it is flushed. The return value is also the number of characters written.
+
+
+
+3. With a face like mine, I do better in print
+
+This task requires us to handle the binary (%b) conversion specifier.
+
+For this task we made one function using the following prototype: 
+	int print_binary(va_list *args, char *buffer, int *buffer_counter);
+
+The main principle of this function is to use the %b specifier to retrieve an unsinged int from the va_list and writes its binary representation into the output buffer. It does this WITHOUT writing directly to any file descriptor. All output is staged through the buffer and like the others, when the buffer reaches it's capacity it is then flushed and written to stdout.
+
+The argument(s) is/are interpreted as an unsinged int. If the value of the int is zero (0), the function will write a single '0' char to the buffer. For non-zero values, the function processes the binary digits by repeatedly dividing the number by 2 and taking the remainder (modulo). Digits are then stored in reverse order into a temporary array (char digits[sizeof(unsigned int) * 8];) and then put into the output buffer in the correct order. The tmp array allows for all possible bits of an unsigned int to have the storage they require.
+
+And finally the function then returns the total value of chars written in correspondence to the input value.
+
+
+
+4. What one has not experienced, one will never understand in print
+
+This task requires us to handle all unsinged base conversion specifiers (u, o, x, X).
+
+For this task we made two functions and 4 wrapper functions to work with our internal dispatch table:
+Standard functions:
+	void print_unsigned_recursive(unsigned int n, unsigned int base, int uppercase, int *len, char *buffer, int *buffer_counter)
+	int print_unsigned_base(va_list *args, unsigned int base, int uppercase, char *buffer, int *buffer_counter)
+	
+Wrapper functions:
+	int print_unsigned_u(va_list *args, char *buffer, int *buffer_counter)
+	int print_unsigned_o(va_list *args, char *buffer, int *buffer_counter)
+	int print_unsigned_x(va_list *args, char *buffer, int *buffer_counter)
+	int print_unsigned_X(va_list *args, char *buffer, int *buffer_counter)
+
+These functions implement printing of unsigned integers for our custom _printf function. The base values for each wrapper function are as follows:
+	%u = base 10 (in other words, a decimal)
+	%o = base 8 (an octal)
+	%x = base 16 (lowercase hexadecimals)
+	%X = base 16 (uppercase hexadecimals)
+
+Like all of our previous functions, output is placed into a buffer which is flushed when full.
+
+Our first main function:
+	void print_unsigned_recursive(unsigned int n, unsigned int base, int uppercase, int *len, char *buffer, int *buffer_counter)
+
+Recursively prints an unsinged int in the specified base. The recursion ensures that digits are emitted most significant first. If n is greater than or equal to base, the function first recurses on n divided by base, then prints the final digit corresponding to n modulo base.
+
+Digit lookup uses either one of these two tables:
+	digits_l = "0123456789abcdef"
+	digits_u = "0123456789ABCDEF"
+According to whether or not our uppercase flag specifies its an uppercase or not.
+
+Each written char will then increment on both *buffer_counter and *len. When the buffer is full, it will then flush.
+
+This function in particular has no return value as the total count is tracked through the integer pointed to by len.
+
+Our second main function:
+	int print_unsigned_base(va_list *args, unsigned int base, int uppercase, char *buffer, int *buffer_counter)
+
+Retrieves an unsinged int from the va_list and prints it using the recursive function above. The return value for this function is the total number of characters written for the value.
+
+Wrapper functions:
+	print_unsigned_u(args, buffer, buffer_counter)
+
+This is a wrapper for printing unsinged decimal integers (%u).
+
+	print_unsigned_o(args, buffer, buffer_counter)
+
+This is a wrapper for printing unsigned octal values (%o).
+
+	print_unsigned_x(args, buffer, buffer_counter)
+
+This is a wrapper for printing lowercase hexadecimal values (%x).
+
+	print_unsigned_X(args, buffer, buffer_counter)
+
+This is a wrapper for printing uppercase hexadecimal values (%X).
+
+All output is written to the buffer and if writing a character causes the buffer counter to reach capacity, it will then write the buffer to stdout and reset the counter to zero.
