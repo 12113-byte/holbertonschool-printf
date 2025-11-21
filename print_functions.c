@@ -47,10 +47,10 @@ int print_a_str(va_list *args, char *buffer, int *buffer_counter)
 			len++;
 			if (*buffer_counter == 1024)
 			{
-				flush_buffer(buffer, buffer_counter);
+			  flush_buffer(buffer, buffer_counter);
 			}
-			return len;
 		}
+		return len;
 	}
 	while (*s)
 	{
