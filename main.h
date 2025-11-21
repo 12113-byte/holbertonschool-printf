@@ -15,6 +15,7 @@ int print_unsigned_u(va_list *args);
 int print_unsigned_o(va_list *args);
 int print_unsigned_x(va_list *args);
 int print_unsigned_X(va_list *args);
+int print_string(va_list *args);
 
 typedef struct specifier
 {

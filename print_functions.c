@@ -10,8 +10,12 @@
 int print_a_char(va_list *args)
 {
 	char c = va_arg(*args, int);
-
-	write(1, &c, 1);
+	buffer[*buffer_counter] = c;
+	(*buffer_counter)++;
+	if (*buffer_counter == 1024)
+	{
+		flush_buffer(buffer, buffer_counter);
+	}
 	return (1);
 }
 
@@ -23,17 +27,31 @@ int print_a_char(va_list *args)
 int print_a_str(va_list *args)
 {
 	char *s = va_arg(*args, char*);
-	int len = 0;
-
+	int len = 0, i = 0;
 	if (s == NULL)
 	{
-		s = "(null)";
+		while (i < 6)
+		{
+			buffer[*buffer_counter] = "(null)"[i];
+			(*buffer_counter)++;
+			i++;
+			len++;
+			if (*buffer_counter == 1024)
+			{
+				flush_buffer(buffer, buffer_counter);
+			}
+		}
 	}
 	while (*s)
 	{
-		write(1, s, 1);
+		buffer[*buffer_counter] = *s;
+		(*buffer_counter)++;
 		s++;
 		len++;
+		if (*buffer_counter == 1024)
+		{
+			flush_buffer(buffer, buffer_counter);
+		}
 	}
 	return (len);
 }
@@ -46,12 +64,17 @@ int print_a_str(va_list *args)
 int print_special(va_list *args)
 {
 	(void)args;
-	write(1, "%", 1);
+	buffer[*buffer_counter] = '%';
+	(*buffer_counter)++;
+	if (*buffer_counter == 1024)
+	{
+		flush_buffer(buffer, buffer_counter);
+	}
 	return (1);
 }
 
 /**
- * print_an_int - prints an integer
+ * print_an_int_or_decimal - prints an integer
  * @args: arguments
  * Return: int length
  */
@@ -59,21 +82,31 @@ int print_special(va_list *args)
 int print_an_int_or_decimal(va_list *args)
 {
 	int number = va_arg(*args, int);
-	char digits[12];
+	char digits[sizeof(int) * 8 + 2];
 	int i = 0, j, len = 0;
 	long n = number;
 
 	if (number == 0)
 	{
-		write(1, "0", 1);
-		return (1);
+		buffer[*buffer_counter] = '0';
+		(*buffer_counter)++;
+		if (*buffer_counter == 1024)
+		{
+			flush_buffer(buffer, buffer_counter);
+		}
+		return (len);
 	}
 
 	if (n < 0)
 	{
-		write(1, "-", 1);
+		buffer[*buffer_counter] = '-';
+		(*buffer_counter)++;
 		len++;
 		n = -n;
+		if (*buffer_counter == 1024)
+		{
+			flush_buffer(buffer, buffer_counter);
+		}
 	}
 
 	while (n > 0)
@@ -85,8 +118,13 @@ int print_an_int_or_decimal(va_list *args)
 
 	for (j = i - 1; j >= 0; j--)
 	{
-		write(1, &digits[j], 1);
+		buffer[*buffer_counter] = digits[j];
+		(*buffer_counter)++;
 		len++;
+		if (*buffer_counter == 1024)
+		{
+			flush_buffer(buffer, buffer_counter);
+		}
 	}
 	return (len);
 }
@@ -100,13 +138,19 @@ int print_an_int_or_decimal(va_list *args)
 int print_binary(va_list *args)
 {
 	unsigned int n = va_arg(*args, unsigned int);
-	char digits[32];
+	char digits[sizeof(unsigned int) *8];
 	int i = 0, j, len = 0;
 
 	if (n == 0)
 	{
-		write(1, "0", 1);
-		return (1);
+		buffer[*buffer_counter] = '0';
+                (*buffer_counter)++;
+                if (*buffer_counter == 1024)
+                {
+                        flush_buffer(buffer, buffer_counter);
+                }
+                len++;
+                return (len);
 	}
 
 	while (n > 0)
@@ -117,10 +161,24 @@ int print_binary(va_list *args)
 	}
 	for (j = i - 1; j >= 0; j--)
 	{
-		write(1, &digits[j], 1);
-		len++;
+		buffer[*buffer_counter] = digits[j];
+                (*buffer_counter)++;
+                len++;
+                if (*buffer_counter == 1024)
+                {
+                        flush_buffer(buffer, buffer_counter);
+                }
 	}
 	return (len);
+}
+
+/**
+ * flush_buffer - prints all stored values
+ */
+void flush_buffer(char *buffer, int *buffer_counter)
+{
+	write(1, buffer, *buffer_counter);
+	*buffer_counter = 0;
 }
 
 /**
@@ -130,19 +188,25 @@ int print_binary(va_list *args)
  * @uppercase: uppercase
  * Return: void
  */
-void print_unsigned_recursive(unsigned int n, unsigned int base, int uppercase, int *len)
+void print_unsigned_recursive(unsigned int n, unsigned int base, int uppercase, int *len, char *buffer, int *buffer_counter )
 {
     	const char *digits_l = "0123456789abcdef";
     	const char *digits_u = "0123456789ABCDEF";
     	const char *digits = uppercase ? digits_u : digits_l;
 	char c;
-
+	
     	if (n >= base)
-        	print_unsigned_recursive(n / base, base, uppercase, len);
-
+	{
+		print_unsigned_recursive(n / base, base, uppercase, len);
+	}
     	c = digits[n % base];
-    	write(1, &c, 1);
+	buffer[*buffer_counter] = c;
+	(*buffer_counter)++;
 	(*len)++;
+	if (*buffer_counter == 1024)
+	{
+		flush_buffer(buffer, buffer_counter);
+	}
 }
 
 /**
@@ -198,3 +262,76 @@ int print_unsigned_X(va_list *args)
     return print_unsigned_base(args, 16, 1);
 }
 
+/**
+ * print_string - prints a string with non priintable characters included
+ * @args: arguments
+ * Return:
+ */
+
+int print_string(va_list *args, char *buffer, int *buffer_counter)
+{
+	int len = 0, i = 0, firt_digit, second_digit;
+	unsigned char val;
+	char *s = va_arg(*args, char*);
+
+	if (s == NULL)
+	{
+		while (i < 6)
+		{
+			buffer[*buffer_counter] = "(null)"[i];
+			(*buffer_counter)++;
+			i++;
+			len++;
+			if (*buffer_counter == 1024)
+			{
+				flush_buffer(buffer, buffer_counter);
+			}
+		}
+	}
+	while (*s)
+	{
+		if (*s >= 32 && *s <= 126)
+		{
+		buffer[*buffer_counter] = *s;
+		(*buffer_counter)++;
+		s++;
+		len++;
+		if (*buffer_counter == 1024)
+		{
+			flush_buffer(buffer, buffer_counter);
+		}
+		}
+		else
+		{
+		buffer[*buffer_counter] = '\\';
+		(*buffer_counter)++;
+		buffer[*buffer_counter] = 'x';
+		(*buffer_counter)++;
+		val = (unsigned char)*s;
+		first_digit = val / 16;
+		buffer[*buffer_counter] = first_digit;
+		(*buffer_counter)++;
+		second_digit = val % 16;
+		buffer[*buffer_counter] = second_digit;
+		(*buffer_counter)++;
+		len++;
+		if (first_digit < 10)
+		{
+			first_char = '0' + first_digit;
+			buffer[*buffer_counter] = *s;
+			(*buffer_counter)++;
+		}
+		else (first_digit >= 10)
+		{
+			first_char = 'A' + (first_digit - 10);
+			buffer[*buffer_counter] = *s;
+			(*buffer_counter)++;
+		}
+		if (*buffer_counter == 1024)
+		{
+			flush_buffer(buffer, buffer_counter);
+		}
+		}
+	}
+	return (len);
+}
