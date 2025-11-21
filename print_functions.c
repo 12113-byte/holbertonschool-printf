@@ -49,6 +49,7 @@ int print_a_str(va_list *args, char *buffer, int *buffer_counter)
 			{
 				flush_buffer(buffer, buffer_counter);
 			}
+			return len;
 		}
 	}
 	while (*s)
