@@ -166,7 +166,7 @@ int print_unsigned_base(va_list *args, unsigned int base, int uppercase)
  */
 int print_unsigned_u(va_list *args)
 {
-    return print_unsigned_base(*args, 10, 0);
+    return print_unsigned_base(args, 10, 0);
 }
 
 /**
@@ -175,7 +175,7 @@ int print_unsigned_u(va_list *args)
  */
 int print_unsigned_o(va_list *args)
 {
-    return print_unsigned_base(*args, 8, 0);
+    return print_unsigned_base(args, 8, 0);
 }
 
 /**
@@ -184,7 +184,7 @@ int print_unsigned_o(va_list *args)
  */
 int print_unsigned_x(va_list *args)
 {
-    return print_unsigned_base(*args, 16, 0);
+    return print_unsigned_base(args, 16, 0);
 }
 
 /**
@@ -193,6 +193,6 @@ int print_unsigned_x(va_list *args)
  */
 int print_unsigned_X(va_list *args)
 {
-    return print_unsigned_base(*args, 16, 1);
+    return print_unsigned_base(args, 16, 1);
 }
 
