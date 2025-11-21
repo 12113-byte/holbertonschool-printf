@@ -157,7 +157,7 @@ int print_unsigned_base(va_list *args, unsigned int base, int uppercase)
 
     	print_unsigned_recursive(n, base, uppercase);
 
-    	return 0;
+    	return (0);
 }
 
 /**
